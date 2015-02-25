@@ -1,0 +1,17 @@
+tile.defeatedcrow.ironChain.name=鉄鎖
+tile.defeatedcrow.anchorBolt.name=アンカーボルト
+tile.defeatedcrow.kyatatu.name=脚立
+tile.defeatedcrow.floodlight.name=フラッドライト
+tile.defeatedcrow.lightBlock.name=不可視光源ブロック
+
+tile.defeatedcrow.reversalHopper.name=上向きホッパー
+tile.defeatedcrow.reversalHopper_gold.name=黄金の上向きホッパー
+tile.defeatedcrow.reversalHopper_black.name=漆黒の上向きホッパー
+tile.defeatedcrow.positiveHopper_gold.name=黄金のホッパー
+tile.defeatedcrow.positiveHopper_black.name=漆黒のホッパー
+
+
+item.defeatedcrow.anzenMet.name=安全帽
+item.defeatedcrow.sagyougi.name=作業服
+item.defeatedcrow.anzenBoots.name=安全靴
+

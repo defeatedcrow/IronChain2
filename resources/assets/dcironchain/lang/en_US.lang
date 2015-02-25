@@ -1,0 +1,16 @@
+tile.defeatedcrow.ironChain.name=Iron Chain
+tile.defeatedcrow.anchorBolt.name=Anchor Bolt
+tile.defeatedcrow.kyatatu.name=Kyatatu
+tile.defeatedcrow.floodlight.name=Flood Light
+tile.defeatedcrow.lightBlock.name=Invisible Light Block
+
+tile.defeatedcrow.reversalHopper.name=Reversal Hopper
+tile.defeatedcrow.reversalHopper_gold.name=Golden Hopper (Reversal)
+tile.defeatedcrow.reversalHopper_black.name=Black Hopper (Reversal)
+tile.defeatedcrow.positiveHopper_gold.name=Golden Hopper
+tile.defeatedcrow.positiveHopper_black.name=Black Hopper
+
+
+item.defeatedcrow.anzenMet.name=Safety Helmet
+item.defeatedcrow.sagyougi.name=Work Clothes
+item.defeatedcrow.anzenBoots.name=Safety Boots

@@ -4,6 +4,8 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import defeatedcrow.ironchain.block.tileentity.*;
 import defeatedcrow.ironchain.client.gui.GuiRHopper;
+import defeatedcrow.ironchain.client.model.ModelBipedThin;
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -24,6 +26,11 @@ public class CommonProxyDC implements IGuiHandler{
 		return -1;
 	}
 	
+	public ModelBipedThin getArmorModel(int slot)
+	{
+		return null;
+	}
+	
 	public void registerRenderers(){}
 	
 	public void registerTile() {
@@ -33,6 +40,7 @@ public class CommonProxyDC implements IGuiHandler{
 		GameRegistry.registerTileEntity(TilePositiveHopperBlack.class, "TilePHopperBlack");
 		GameRegistry.registerTileEntity(TilePositiveHopperGold.class, "TilePHopperGold");
 		GameRegistry.registerTileEntity(TileFloodLight.class, "TileEntityFloodLight");
+		GameRegistry.registerTileEntity(TileBarriarCorn.class, "TileEntityBarriarCorn");
 	}
 
 	public World getClientWorld() {

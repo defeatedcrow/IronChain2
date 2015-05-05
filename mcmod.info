@@ -1,4 +1,4 @@
-﻿[
+[
   {
     "description":"",
     "parent":"",
@@ -12,11 +12,11 @@
       "defeatedcrow"
     ],
     "name":"DCsIronChain2",
-    "url":"http://forum.minecraftuser.jp/viewtopic.php?f=13&t=17657",
+    "url":"http://defeatedcrow.wiki.fc2.com/wiki/IronChain2",
     "updateUrl":"",
-    "version":"1.7.10_2.0e",
+    "version":"1.7.10_2.1b",
     "requiredMods":[
-      "Minecraft Forge1.7.10 10.13.2.1230+"
+      "Minecraft Forge1.7.10 10.13.2.1291+"
     ]
   }
 ]

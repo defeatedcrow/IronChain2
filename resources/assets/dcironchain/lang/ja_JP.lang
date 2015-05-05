@@ -3,6 +3,7 @@ tile.defeatedcrow.anchorBolt.name=アンカーボルト
 tile.defeatedcrow.kyatatu.name=脚立
 tile.defeatedcrow.floodlight.name=フラッドライト
 tile.defeatedcrow.lightBlock.name=不可視光源ブロック
+tile.defeatedcrow.barriarCorn.name=ロードコーン
 
 tile.defeatedcrow.reversalHopper.name=上向きホッパー
 tile.defeatedcrow.reversalHopper_gold.name=黄金の上向きホッパー
@@ -14,4 +15,6 @@ tile.defeatedcrow.positiveHopper_black.name=漆黒のホッパー
 item.defeatedcrow.anzenMet.name=安全帽
 item.defeatedcrow.sagyougi.name=作業服
 item.defeatedcrow.anzenBoots.name=安全靴
+item.defeatedcrow.anzenBelt.name=安全帯
+item.defeatedcrow.altimeter.name=高度計
 

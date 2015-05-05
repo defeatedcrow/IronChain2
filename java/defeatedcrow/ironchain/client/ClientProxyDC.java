@@ -17,6 +17,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ClientProxyDC extends CommonProxyDC {
 	
+	private static final ModelBipedThin metModel = new ModelBipedThin(0);
+	private static final ModelBipedThin bodyModel = new ModelBipedThin(1);
+	private static final ModelBipedThin bootsModel = new ModelBipedThin(3);
+	
 	@Override
 	public World getClientWorld()
 	{
@@ -40,6 +44,7 @@ public class ClientProxyDC extends CommonProxyDC {
 		RenderingRegistry.registerBlockHandler(new RenderFloodLight());
 		RenderingRegistry.registerBlockHandler(new RenderRHopper());
 		RenderingRegistry.registerBlockHandler(new RenderRHopper2());
+		RenderingRegistry.registerBlockHandler(new RenderBarriarCorn());
 	}
 	
 	public void registerTile() {
@@ -49,5 +54,22 @@ public class ClientProxyDC extends CommonProxyDC {
 		GameRegistry.registerTileEntity(TilePositiveHopperGold.class, "TilePHopperGold");
 		GameRegistry.registerTileEntity(TilePositiveHopperBlack.class, "TilePHopperBlack");
 		ClientRegistry.registerTileEntity(TileFloodLight.class, "TileEntityFloodLight", new TSRendererFloodLight());
+		ClientRegistry.registerTileEntity(TileBarriarCorn.class, "TileEntityBarriarCorn", new TSRendererBarriarCorn());
+	}
+	
+	@Override
+	public ModelBipedThin getArmorModel(int slot)
+	{
+		switch(slot)
+		{
+		case 0:
+			return metModel;
+		case 1:
+			return bodyModel;
+		case 3:
+			return bootsModel;
+		default:
+			return null;
+		}
 	}
 }

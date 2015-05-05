@@ -249,6 +249,7 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
                     if (itemstack1 == null || itemstack1.stackSize == 0)
                     {
                         iinventory.markDirty();
+                        this.markDirty();
                         return true;
                     }
 
@@ -331,6 +332,7 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
             if (itemstack2 == null || itemstack2.stackSize <= 0)
             {
                 par1IInventory.markDirty();
+                par0Hopper.markDirty();
                 return true;
             }
 

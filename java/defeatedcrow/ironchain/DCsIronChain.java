@@ -39,7 +39,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @Mod(
 		modid = "DCIronChain",
 		name = "DCsIronChain2",
-		version = "1.7.10_2.1b",
+		version = "1.7.10_2.1c",
 		dependencies = "required-after:Forge@[10.13.2.1291,);after:BuildCraft|Core")
 public class DCsIronChain {
 

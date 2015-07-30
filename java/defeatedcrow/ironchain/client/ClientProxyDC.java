@@ -13,40 +13,41 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-
 @SideOnly(Side.CLIENT)
 public class ClientProxyDC extends CommonProxyDC {
-	
+
 	private static final ModelBipedThin metModel = new ModelBipedThin(0);
 	private static final ModelBipedThin bodyModel = new ModelBipedThin(1);
 	private static final ModelBipedThin bootsModel = new ModelBipedThin(3);
-	
+
 	@Override
-	public World getClientWorld()
-	{
+	public World getClientWorld() {
 		return FMLClientHandler.instance().getClient().theWorld;
 	}
-	
+
 	@Override
-	public int addArmor(String armor)
-	{
+	public int addArmor(String armor) {
 		return RenderingRegistry.addNewArmourRendererPrefix(armor);
 	}
-	
-	public int getRenderID()
-	{
+
+	@Override
+	public int getRenderID() {
 		return RenderingRegistry.getNextAvailableRenderId();
 	}
-	
+
 	@Override
-	public void registerRenderers()
-	{
+	public void registerRenderers() {
 		RenderingRegistry.registerBlockHandler(new RenderFloodLight());
 		RenderingRegistry.registerBlockHandler(new RenderRHopper());
 		RenderingRegistry.registerBlockHandler(new RenderRHopper2());
 		RenderingRegistry.registerBlockHandler(new RenderBarriarCorn());
+		RenderingRegistry.registerBlockHandler(new RenderSignM());
+		RenderingRegistry.registerBlockHandler(new RenderSignS());
+		RenderingRegistry.registerBlockHandler(new RenderSignL());
+		RenderingRegistry.registerBlockHandler(new RenderChain());
 	}
-	
+
+	@Override
 	public void registerTile() {
 		GameRegistry.registerTileEntity(TileEntityRHopper.class, "TileEntityRHopper");
 		GameRegistry.registerTileEntity(TileRHopperGold.class, "TileEntityRHopperGold");
@@ -55,13 +56,13 @@ public class ClientProxyDC extends CommonProxyDC {
 		GameRegistry.registerTileEntity(TilePositiveHopperBlack.class, "TilePHopperBlack");
 		ClientRegistry.registerTileEntity(TileFloodLight.class, "TileEntityFloodLight", new TSRendererFloodLight());
 		ClientRegistry.registerTileEntity(TileBarriarCorn.class, "TileEntityBarriarCorn", new TSRendererBarriarCorn());
+		ClientRegistry.registerTileEntity(TileFluidSign.class, "TileFluidSign.dc", new TSRendererFluidSignS());
+		ClientRegistry.registerTileEntity(TileFluidSignL.class, "TileFluidSignL.dc", new TSRendererFluidSignL());
 	}
-	
+
 	@Override
-	public ModelBipedThin getArmorModel(int slot)
-	{
-		switch(slot)
-		{
+	public ModelBipedThin getArmorModel(int slot) {
+		switch (slot) {
 		case 0:
 			return metModel;
 		case 1:

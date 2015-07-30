@@ -210,6 +210,34 @@ public class RecipeRegister {
 				Character.valueOf('Z'),
 				Blocks.dropper }));
 
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(DCsIronChain.fluidSignS, 1), new Object[] {
+				" X ",
+				"XYX",
+				" X ",
+				Character.valueOf('X'),
+				Blocks.glass_pane,
+				Character.valueOf('Y'),
+				Items.sign }));
+
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(DCsIronChain.dengerSign, 1), new Object[] {
+				" X ",
+				"XYX",
+				" X ",
+				Character.valueOf('X'),
+				Items.paper,
+				Character.valueOf('Y'),
+				Items.sign }));
+
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(DCsIronChain.fluidSignL, 1), new Object[] {
+				"X",
+				Character.valueOf('X'),
+				DCsIronChain.fluidSignS }));
+
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(DCsIronChain.fluidSignS, 1), new Object[] {
+				"X",
+				Character.valueOf('X'),
+				DCsIronChain.fluidSignL }));
+
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(DCsIronChain.altimeter, 1), new Object[] {
 				" Y ",
 				"XZX",

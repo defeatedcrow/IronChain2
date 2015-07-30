@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import defeatedcrow.ironchain.*;
 import defeatedcrow.ironchain.block.*;
 import defeatedcrow.ironchain.event.PlayerUpdateEvent;
+import defeatedcrow.ironchain.integration.RegisterFluidData;
 import defeatedcrow.ironchain.item.ItemAltimeter;
 import defeatedcrow.ironchain.item.ItemAnzenArmor;
 import net.minecraft.block.Block;
@@ -31,6 +32,7 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -39,7 +41,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @Mod(
 		modid = "DCIronChain",
 		name = "DCsIronChain2",
-		version = "1.7.10_2.1c",
+		version = "1.7.10_2.1d",
 		dependencies = "required-after:Forge@[10.13.2.1291,);after:BuildCraft|Core")
 public class DCsIronChain {
 
@@ -66,6 +68,13 @@ public class DCsIronChain {
 	public static Block hopperBlack;
 	public static Block barriarCorn;
 
+	public static Block fluidSignS;
+	public static Block fluidSignL;
+	public static Block dengerSign;
+
+	public static Block ashibaBlock;
+	public static Block ashibaStair;
+
 	public static Item anzenMet, sagyougi, anzenBelt, anzenBoots;
 
 	public static Item altimeter;
@@ -76,6 +85,12 @@ public class DCsIronChain {
 	public static int modelHopper2;
 	public static int modelBarriar;
 	public static int modelHook;
+	public static int modelSignS;
+	public static int modelSignM;
+	public static int modelSignL;
+	public static int modelChain;
+	public static int modelAshiba;
+	public static int modelAshibaStair;
 
 	public static int RHGoldCoolTime = 4;
 	public static float harnessCheckDistance = 5.0F;
@@ -85,6 +100,8 @@ public class DCsIronChain {
 	public static boolean notUseLight = false;
 	public static boolean visibleLight = false;
 	public static boolean bronzeRecipe = true;
+	public static boolean JPsign = false;
+	public static boolean signIcon = false;
 
 	public static boolean debug = false;
 
@@ -106,11 +123,19 @@ public class DCsIronChain {
 			Property useBronzeRecipe = cfg
 					.get("Setting", "UseBronzeRecipe", bronzeRecipe, "Enable some recipe that use the bronze ingot instead of the iron ingot.");
 
+			Property useJapaneseFluidSign = cfg
+					.get("Setting", "UseJapaneseFluidSign", JPsign, "Use Japanese to Fluid Sign. If you want to use English, please set false.");
+
+			Property useFluidIconOnSign = cfg
+					.get("Setting", "UseIconOnFluidSign", JPsign, "Use Fluid Icon instead of banner texture in the fluid signboard.");
+
 			notUseLight = notUseLightBlock.getBoolean(notUseLight);
 			visibleLight = visibleLightBlock.getBoolean(visibleLight);
 			RHGoldCoolTime = setCoolTime.getInt();
 			bronzeRecipe = useBronzeRecipe.getBoolean(true);
 			harnessCheckDistance = (float) setHarnessDistance.getDouble();
+			JPsign = useJapaneseFluidSign.getBoolean(true);
+			signIcon = useFluidIconOnSign.getBoolean(true);
 
 		} catch (Exception e) {
 			IronChainLog.logger.error("Error Message", e);
@@ -130,6 +155,12 @@ public class DCsIronChain {
 		DCLightPart = (new BlockLightPart()).setBlockName("defeatedcrow.lightBlock");
 
 		barriarCorn = (new BlockBarriarCorn()).setBlockName("defeatedcrow.barriarCorn").setCreativeTab(ironchainTab);
+
+		dengerSign = (new BlockSignM()).setBlockName("defeatedcrow.dengerSign").setCreativeTab(ironchainTab);
+
+		fluidSignS = (new BlockSignS()).setBlockName("defeatedcrow.fluidSign_S").setCreativeTab(ironchainTab);
+
+		fluidSignL = (new BlockSignL()).setBlockName("defeatedcrow.fluidSign_L").setCreativeTab(ironchainTab);
 
 		RHopper = (new BlockRHopper()).setBlockName("defeatedcrow.reversalHopper").setCreativeTab(ironchainTab);
 
@@ -169,6 +200,9 @@ public class DCsIronChain {
 		GameRegistry.registerBlock(floodLight, "floodLight");
 		GameRegistry.registerBlock(DCLightPart, "DCLightPart");
 		GameRegistry.registerBlock(barriarCorn, "barriarCorn");
+		GameRegistry.registerBlock(dengerSign, ItemSignM.class, "dengerSign");
+		GameRegistry.registerBlock(fluidSignS, "fluidSign_S");
+		GameRegistry.registerBlock(fluidSignL, "fluidSign_L");
 		GameRegistry.registerBlock(RHopper, "reversalHopper");
 		GameRegistry.registerBlock(RHopperGold, "upwardHopper_gold");
 		GameRegistry.registerBlock(RHopperBlack, "reversalHopper_black");
@@ -190,6 +224,10 @@ public class DCsIronChain {
 		this.modelFLight = proxy.getRenderID();
 		this.modelHopper2 = proxy.getRenderID();
 		this.modelBarriar = proxy.getRenderID();
+		this.modelSignS = proxy.getRenderID();
+		this.modelSignM = proxy.getRenderID();
+		this.modelSignL = proxy.getRenderID();
+		this.modelChain = proxy.getRenderID();
 		proxy.registerRenderers();
 
 		// Registering new recipe
@@ -221,6 +259,12 @@ public class DCsIronChain {
 				e.printStackTrace(System.err);
 			}
 		}
+	}
+
+	@EventHandler
+	public void postinit(FMLPostInitializationEvent event) {
+		// fluid data
+		RegisterFluidData.register();
 	}
 
 }

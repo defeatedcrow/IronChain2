@@ -467,7 +467,7 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 		AxisAlignedBB AABB = null;
 		if (hopper instanceof TileEntityRHopper) {
 			range = ((TileEntityRHopper) hopper).getSuctionRange();
-			height = MathHelper.ceiling_float_int((float) ((range + 1) / 2));
+			height = MathHelper.ceiling_float_int((float) range + 1.0F);
 			if (height < 1)
 				height = 1;
 			if (((TileEntityRHopper) hopper).isReversal()) {

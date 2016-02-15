@@ -41,14 +41,14 @@ import buildcraft.api.transport.IPipeTile.PipeType;
 public class TileEntityRHopper extends TileEntity implements IHopper, IReversalHopper, IPipeConnection {
 	protected int transferCooldown = -1;
 
-	public ItemStack[] hopperItemStacks = new ItemStack[this.getHopperSize()];
+	public ItemStack[] hopperItems = new ItemStack[this.getHopperSize()];
 
 	// NBT
 	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
 		super.readFromNBT(par1NBTTagCompound);
 		NBTTagList nbttaglist = par1NBTTagCompound.getTagList("Items", 10);
-		this.hopperItemStacks = new ItemStack[this.getSizeInventory()];
+		this.hopperItems = new ItemStack[this.getSizeInventory()];
 
 		this.transferCooldown = par1NBTTagCompound.getInteger("TransferCooldown");
 
@@ -56,8 +56,8 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
 			byte b0 = nbttagcompound1.getByte("Slot");
 
-			if (b0 >= 0 && b0 < this.hopperItemStacks.length) {
-				this.hopperItemStacks[b0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+			if (b0 >= 0 && b0 < this.hopperItems.length) {
+				this.hopperItems[b0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
 			}
 		}
 	}
@@ -67,11 +67,11 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 		super.writeToNBT(par1NBTTagCompound);
 		NBTTagList nbttaglist = new NBTTagList();
 
-		for (int i = 0; i < this.hopperItemStacks.length; ++i) {
-			if (this.hopperItemStacks[i] != null) {
+		for (int i = 0; i < this.hopperItems.length; ++i) {
+			if (this.hopperItems[i] != null) {
 				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 				nbttagcompound1.setByte("Slot", (byte) i);
-				this.hopperItemStacks[i].writeToNBT(nbttagcompound1);
+				this.hopperItems[i].writeToNBT(nbttagcompound1);
 				nbttaglist.appendTag(nbttagcompound1);
 			}
 		}
@@ -106,9 +106,9 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 		if (_items != null) {
 			for (int i = 0; i < this.getSizeInventory(); ++i) {
 				if (_items[i] != null) {
-					this.hopperItemStacks[i] = _items[i].copy();
+					this.hopperItems[i] = _items[i].copy();
 				} else {
-					this.hopperItemStacks[i] = null;
+					this.hopperItems[i] = null;
 				}
 			}
 		}
@@ -117,7 +117,7 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 	// write
 	public ItemStack[] getItems() {
 
-		return this.hopperItemStacks;
+		return this.hopperItems;
 	}
 
 	public int getCoolTime() {
@@ -141,10 +141,10 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 	public boolean updateHopper() {
 		if (this.worldObj != null && !this.worldObj.isRemote) {
 			if (!this.isCoolingDown() && BlockRHopper.getIsBlockNotPoweredFromMetadata(this.getBlockMetadata())) {
-				// 搬出が先
-				boolean flag = this.insertItemToInventory();
-				// 搬入
-				flag = suckItemsIntoHopper(this) || flag;
+				// 搬入を先に変更
+				boolean flag = suckItemsIntoHopper(this);
+				// 搬出
+				flag = this.insertItemToInventory() || flag;
 
 				if (flag) {
 					this.setTransferCooldown(4);
@@ -216,15 +216,14 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 					ItemStack itemstack = this.getStackInSlot(i).copy();
 					int side = ForgeDirection.OPPOSITES[BlockRHopper.getDirectionFromMetadata(this.getBlockMetadata())];
 					int extract = this.canInsertSize(iinventory, itemstack, this.getExtractLimitSize(), side);
-					ItemStack itemstack1 = insertStack(iinventory, this.decrStackSize(i, extract), side);
 
-					if (itemstack1 == null || itemstack1.stackSize == 0) {
+					if (extract > 0) {
+						ItemStack insert = this.decrStackSize(i, extract);
+						insertStack(iinventory, insert, side);
 						iinventory.markDirty();
 						this.markDirty();
 						return true;
 					}
-
-					this.setInventorySlotContents(i, itemstack);
 				}
 			}
 
@@ -244,7 +243,7 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 		if (iinventory != null) {
 			byte b0 = 0;// 吸引サイドは0(下部から)に偽装する
 
-			if (iinventory instanceof ISidedInventory && b0 > -1) {
+			if (iinventory instanceof ISidedInventory) {
 				ISidedInventory isidedinventory = (ISidedInventory) iinventory;
 				int[] aint = isidedinventory.getAccessibleSlotsFromSide(b0);
 
@@ -322,19 +321,19 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 	/*
 	 * ホッパー、対象の双方で使うアイテム挿入処理
 	 */
-	public static ItemStack insertStack(IInventory par0IInventory, ItemStack par1ItemStack, int par2) {
-		if (par0IInventory instanceof ISidedInventory && par2 > -1) {
+	public static ItemStack insertStack(IInventory par0IInventory, ItemStack par1ItemStack, int side) {
+		if (par0IInventory instanceof ISidedInventory && side > -1) {
 			ISidedInventory isidedinventory = (ISidedInventory) par0IInventory;
-			int[] aint = isidedinventory.getAccessibleSlotsFromSide(par2);
+			int[] aint = isidedinventory.getAccessibleSlotsFromSide(side);
 
 			for (int j = 0; j < aint.length && par1ItemStack != null && par1ItemStack.stackSize > 0; ++j) {
-				par1ItemStack = insertItemstack(par0IInventory, par1ItemStack, aint[j], par2);
+				par1ItemStack = insertItemstack(par0IInventory, par1ItemStack, aint[j], side);
 			}
 		} else {
 			int k = par0IInventory.getSizeInventory();
 
 			for (int l = 0; l < k && par1ItemStack != null && par1ItemStack.stackSize > 0; ++l) {
-				par1ItemStack = insertItemstack(par0IInventory, par1ItemStack, l, par2);
+				par1ItemStack = insertItemstack(par0IInventory, par1ItemStack, l, side);
 			}
 		}
 
@@ -358,13 +357,13 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 
 			for (int j = 0; j < aint.length; ++j) {
 				ItemStack checkItem = isidedinventory.getStackInSlot(j);
-				if (checkItem != null) {
+				if (checkItem == null) {
+					check = isidedinventory.getInventoryStackLimit();
+					break;
+				} else if (areItemStacksEqualItem(item, checkItem)) {
 					check = isidedinventory.getInventoryStackLimit() - checkItem.stackSize;
 					if (check > 0)
 						break;
-				} else {
-					check = isidedinventory.getInventoryStackLimit();
-					break;
 				}
 			}
 		} else {
@@ -372,13 +371,13 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 
 			for (int l = 0; l < k; ++l) {
 				ItemStack checkItem = inv.getStackInSlot(l);
-				if (checkItem != null) {
+				if (checkItem == null) {
+					check = inv.getInventoryStackLimit();
+					break;
+				} else if (areItemStacksEqualItem(item, checkItem)) {
 					check = inv.getInventoryStackLimit() - checkItem.stackSize;
 					if (check > 0)
 						break;
-				} else {
-					check = inv.getInventoryStackLimit();
-					break;
 				}
 			}
 		}
@@ -524,24 +523,33 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 		return iinventory;
 	}
 
-	protected static boolean areItemStacksEqualItem(ItemStack par0ItemStack, ItemStack par1ItemStack) {
-		return par0ItemStack.getItem() != par1ItemStack.getItem() ? false
-				: (par0ItemStack.getItemDamage() != par1ItemStack.getItemDamage() ? false
-						: (par0ItemStack.stackSize > par0ItemStack.getMaxStackSize() ? false : ItemStack
-								.areItemStackTagsEqual(par0ItemStack, par1ItemStack)));
+	protected static boolean areItemStacksEqualItem(ItemStack stack, ItemStack target) {
+		if (stack != null && target != null && stack.getItem() != null && stack.getItem() != null) {
+			boolean i = stack.getItem() == target.getItem();
+			boolean m = stack.getItemDamage() == target.getItemDamage();
+			boolean n = !stack.hasTagCompound() && !target.hasTagCompound();
+			if (stack.hasTagCompound() && target.hasTagCompound()
+					&& stack.stackTagCompound.equals(target.stackTagCompound)) {
+				n = true;
+			}
+
+			return i && m && n;
+		}
+
+		return stack == null && target == null;
 	}
 
 	// Inventory
 	@Override
 	public int getSizeInventory() {
 
-		return this.hopperItemStacks.length;
+		return this.hopperItems.length;
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
 		if (i < this.getSizeInventory()) {
-			return this.hopperItemStacks[i];
+			return this.hopperItems[i];
 		} else
 			return null;
 
@@ -549,19 +557,19 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
-		if (this.hopperItemStacks[i] != null) {
+		if (this.hopperItems[i] != null) {
 			ItemStack itemstack;
 
-			if (this.hopperItemStacks[i].stackSize <= j) {
-				itemstack = this.hopperItemStacks[i].copy();
-				this.hopperItemStacks[i].stackSize = 0;
-				this.hopperItemStacks[i] = null;
+			if (this.hopperItems[i].stackSize <= j) {
+				itemstack = this.hopperItems[i].copy();
+				this.hopperItems[i].stackSize = 0;
+				this.hopperItems[i] = null;
 				return itemstack;
 			} else {
-				itemstack = this.hopperItemStacks[i].splitStack(j);
+				itemstack = this.hopperItems[i].splitStack(j);
 
-				if (this.hopperItemStacks[i].stackSize == 0) {
-					this.hopperItemStacks[i] = null;
+				if (this.hopperItems[i].stackSize == 0) {
+					this.hopperItems[i] = null;
 				}
 
 				return itemstack;
@@ -573,9 +581,9 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int i) {
-		if (this.hopperItemStacks[i] != null) {
-			ItemStack itemstack = this.hopperItemStacks[i];
-			this.hopperItemStacks[i] = null;
+		if (this.hopperItems[i] != null) {
+			ItemStack itemstack = this.hopperItems[i];
+			this.hopperItems[i] = null;
 			return itemstack;
 		} else {
 			return null;
@@ -585,7 +593,7 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
 		if (i < 5) {
-			this.hopperItemStacks[i] = itemstack;
+			this.hopperItems[i] = itemstack;
 
 			if (itemstack != null && itemstack.stackSize > this.getInventoryStackLimit()) {
 				itemstack.stackSize = this.getInventoryStackLimit();

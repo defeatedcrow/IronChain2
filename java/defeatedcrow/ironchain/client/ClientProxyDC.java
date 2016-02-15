@@ -1,10 +1,13 @@
 package defeatedcrow.ironchain.client;
 
+import org.lwjgl.input.Keyboard;
+
 import defeatedcrow.ironchain.*;
 import defeatedcrow.ironchain.block.tileentity.*;
 import defeatedcrow.ironchain.client.block.*;
 import defeatedcrow.ironchain.client.model.*;
 import net.minecraft.world.World;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -23,6 +26,11 @@ public class ClientProxyDC extends CommonProxyDC {
 	@Override
 	public World getClientWorld() {
 		return FMLClientHandler.instance().getClient().theWorld;
+	}
+
+	@Override
+	public EntityPlayer getClientPlayer() {
+		return Minecraft.getMinecraft().thePlayer;
 	}
 
 	@Override
@@ -73,4 +81,10 @@ public class ClientProxyDC extends CommonProxyDC {
 			return null;
 		}
 	}
+
+	@Override
+	public boolean isGuiKeyDown() {
+		return Keyboard.isKeyDown(DCsIronChain.toolGuiKey);
+	}
+
 }

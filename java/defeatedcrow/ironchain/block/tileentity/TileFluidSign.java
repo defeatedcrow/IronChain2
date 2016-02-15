@@ -147,10 +147,12 @@ public class TileFluidSign extends TileEntity {
 				FluidTankInfo[] info = tank.getTankInfo(ForgeDirection.DOWN); // 完成品を狙うため下から
 				Fluid fluid = null;
 				int amo = 0;
-				for (FluidTankInfo i : info) {
-					if (i.fluid != null && i.fluid.getFluid() != null) {
-						fluid = i.fluid.getFluid();
-						amo = i.fluid.amount;
+				if (info != null) {
+					for (FluidTankInfo i : info) {
+						if (i.fluid != null && i.fluid.getFluid() != null) {
+							fluid = i.fluid.getFluid();
+							amo = i.fluid.amount;
+						}
 					}
 				}
 

@@ -2,6 +2,7 @@ package defeatedcrow.ironchain.event;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
@@ -10,9 +11,14 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import defeatedcrow.ironchain.DCsIronChain;
 import defeatedcrow.ironchain.IronChainLog;
+import defeatedcrow.ironchain.packet.MessageGuiKey;
+import defeatedcrow.ironchain.packet.PacketHandlerDC;
 
 // anzen belt の機能実装用
 public class PlayerUpdateEvent {
+
+	private int count = 10;
+	private boolean push = false;
 
 	@SubscribeEvent
 	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
@@ -22,12 +28,30 @@ public class PlayerUpdateEvent {
 			EntityPlayer player = (EntityPlayer) entity;
 			ItemStack plate = player.inventory.armorInventory[2];
 			ItemStack belt = player.inventory.armorInventory[1];
+			boolean hasLantern = false;
 
 			if (plate != null && plate.getItem() != null && plate.getItem() == DCsIronChain.sagyougi) {
 				if (!player.onGround && player.isOnLadder()) {
 					if (player.isCollidedHorizontally) {
 						player.motionY = 0.32D;
 					}
+				}
+			}
+
+			if (plate != null && plate.getItem() != null && plate.getItem() == DCsIronChain.lifeJacket) {
+				if (player.isInWater()) {
+					player.motionY += 0.038D;
+				}
+			}
+
+			if (belt != null && belt.getItem() != null && belt.getItem() == DCsIronChain.toolBag) {
+				if (DCsIronChain.proxy.isGuiKeyDown()) {
+					if (!push) {
+						PacketHandlerDC.INSTANCE.sendToServer(new MessageGuiKey((byte) 1));
+						push = true;
+					}
+				} else {
+					push = false;
 				}
 			}
 

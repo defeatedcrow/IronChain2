@@ -66,9 +66,9 @@ public class TSRendererFluidSignS extends TileEntitySpecialRenderer {
 
 				int col = flu.getColor();
 				if (col != 0xFFFFFF) {
-					float r = (col & 0xFF0000) / 255;
-					float g = (col & 0x0000FF) / 255;
-					float b = (col & 0x00FF00) / 255;
+					float r = (col & 0xFF0000) * 1.2F / 0xFF0000;
+					float g = (col & 0x00FF00) * 1.2F / 0x00FF00;
+					float b = (col & 0x0000FF) * 1.2F / 0x0000FF;
 					GL11.glColor4f(r, g, b, 1.0F);
 				}
 

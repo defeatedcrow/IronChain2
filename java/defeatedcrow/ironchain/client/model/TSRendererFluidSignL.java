@@ -23,6 +23,7 @@ import defeatedcrow.ironchain.block.tileentity.TileFluidSign;
 public class TSRendererFluidSignL extends TileEntitySpecialRenderer {
 
 	private static final ResourceLocation signTex = new ResourceLocation("dcironchain:textures/blocks/sign_banner.png");
+	private static final ResourceLocation baseTex = new ResourceLocation("dcironchain:textures/blocks/sign_baseL.png");
 	public static TSRendererFluidSignL renderer;
 
 	public void renderTileEntitySignAt(TileFluidSign par1Tile, double par2, double par4, double par6, float par8) {
@@ -165,6 +166,16 @@ public class TSRendererFluidSignL extends TileEntitySpecialRenderer {
 			float U = 1.0F;
 			float v = 0.0F;
 			float V = 1.0F;
+
+			this.bindTexture(baseTex);
+
+			tessellator.startDrawingQuads();
+			tessellator.setNormal(1.0F, 0.0F, 0.0F);
+			tessellator.addVertexWithUV(1.0D, -0.875D, 0.43D, U, v);
+			tessellator.addVertexWithUV(-1.0D, -0.875D, 0.43D, u, v);
+			tessellator.addVertexWithUV(-1.0D, 0.875D, 0.43D, u, V);
+			tessellator.addVertexWithUV(1.0D, 0.875D, 0.43D, U, V);
+			tessellator.draw();
 
 			this.bindTexture(new ResourceLocation("dcironchain:textures/blocks/anchorbolt.png"));
 

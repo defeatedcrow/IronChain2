@@ -145,7 +145,7 @@ public class BlockKyatatu extends Block {
 	public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, Block par5) {
 		ForgeDirection dir = ForgeDirection.UP;
 		if (!par1World.isSideSolid(par2, par3 - 1, par4, dir) && par1World.getBlock(par2, par3 - 1, par4) != this) {
-			if (par1World.getBlockMetadata(par2, par3, par4) < 1)
+			if (par1World.getBlockMetadata(par2, par3, par4) < 2)
 				this.dropBlockAsItem(par1World, par2, par3, par4, 0, 0);
 			par1World.setBlockToAir(par2, par3, par4);
 		}

@@ -6,12 +6,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 
+import org.lwjgl.input.Keyboard;
+
 import defeatedcrow.ironchain.*;
 import defeatedcrow.ironchain.block.*;
 import defeatedcrow.ironchain.event.PlayerUpdateEvent;
+import defeatedcrow.ironchain.event.ToolSupplyEvent;
 import defeatedcrow.ironchain.integration.RegisterFluidData;
 import defeatedcrow.ironchain.item.ItemAltimeter;
 import defeatedcrow.ironchain.item.ItemAnzenArmor;
+import defeatedcrow.ironchain.item.ItemLantern;
+import defeatedcrow.ironchain.item.ItemLifejacket;
+import defeatedcrow.ironchain.item.ItemToolBag;
+import defeatedcrow.ironchain.packet.PacketHandlerDC;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -41,7 +48,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @Mod(
 		modid = "DCIronChain",
 		name = "DCsIronChain2",
-		version = "1.7.10_2.1d",
+		version = "1.7.10_2.2b",
 		dependencies = "required-after:Forge@[10.13.2.1291,);after:BuildCraft|Core")
 public class DCsIronChain {
 
@@ -76,10 +83,16 @@ public class DCsIronChain {
 	public static Block ashibaStair;
 
 	public static Item anzenMet, sagyougi, anzenBelt, anzenBoots;
+	public static Item lifeJacket;
+	public static Item toolBag;
 
 	public static Item altimeter;
 
 	public static int guiIdRHopper = 1;
+	public static int guiIdToolBag = 2;
+
+	public static int toolGuiKey = Keyboard.KEY_X;
+
 	public static int modelRHopper;
 	public static int modelFLight;
 	public static int modelHopper2;
@@ -102,8 +115,9 @@ public class DCsIronChain {
 	public static boolean bronzeRecipe = true;
 	public static boolean JPsign = false;
 	public static boolean signIcon = false;
+	public static boolean autoTool = true;
 
-	public static boolean debug = false;
+	public static boolean debug = true;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -129,6 +143,12 @@ public class DCsIronChain {
 			Property useFluidIconOnSign = cfg
 					.get("Setting", "UseIconOnFluidSign", JPsign, "Use Fluid Icon instead of banner texture in the fluid signboard.");
 
+			Property guiBagKey = cfg
+					.get("Setting", "ToolBagGuiKey", toolGuiKey, "Set Key Number for Opening ToolBag Gui.");
+
+			Property toolSup = cfg
+					.get("Setting", "AutoToolSupply", autoTool, "Enable supplying item from the tool bag, when using tool is broken.");
+
 			notUseLight = notUseLightBlock.getBoolean(notUseLight);
 			visibleLight = visibleLightBlock.getBoolean(visibleLight);
 			RHGoldCoolTime = setCoolTime.getInt();
@@ -136,6 +156,8 @@ public class DCsIronChain {
 			harnessCheckDistance = (float) setHarnessDistance.getDouble();
 			JPsign = useJapaneseFluidSign.getBoolean(true);
 			signIcon = useFluidIconOnSign.getBoolean(true);
+			toolGuiKey = guiBagKey.getInt();
+			autoTool = toolSup.getBoolean();
 
 		} catch (Exception e) {
 			IronChainLog.logger.error("Error Message", e);
@@ -192,6 +214,14 @@ public class DCsIronChain {
 				.setUnlocalizedName("defeatedcrow.anzenBoots").setCreativeTab(ironchainTab)
 				.setTextureName("dcironchain:anzen_boots");
 
+		lifeJacket = (new ItemLifejacket(ItemArmor.ArmorMaterial.CHAIN, DCsIronChain.proxy.addArmor("lifejacket"), 1))
+				.setUnlocalizedName("defeatedcrow.lifeJacket").setCreativeTab(ironchainTab)
+				.setTextureName("dcironchain:lifeJacket");
+
+		toolBag = (new ItemToolBag(ItemArmor.ArmorMaterial.CHAIN, DCsIronChain.proxy.addArmor("lifejacket"), 2))
+				.setUnlocalizedName("defeatedcrow.toolBag").setCreativeTab(ironchainTab)
+				.setTextureName("dcironchain:toolBag");
+
 		altimeter = (new ItemAltimeter()).setCreativeTab(ironchainTab);
 
 		GameRegistry.registerBlock(ironChain, "ironChain");
@@ -214,6 +244,8 @@ public class DCsIronChain {
 		GameRegistry.registerItem(anzenBelt, "anzen_belt");
 		GameRegistry.registerItem(anzenBoots, "anzen_boots");
 		GameRegistry.registerItem(altimeter, "altimeter");
+		GameRegistry.registerItem(lifeJacket, "lifeJacket");
+		GameRegistry.registerItem(toolBag, "toolBag");
 
 	}
 
@@ -240,6 +272,10 @@ public class DCsIronChain {
 
 		// イベント
 		MinecraftForge.EVENT_BUS.register(new PlayerUpdateEvent());
+		MinecraftForge.EVENT_BUS.register(new ToolSupplyEvent());
+
+		// packet
+		PacketHandlerDC.init();
 
 		// 以下は導入のチェックのみ
 		if (Loader.isModLoaded("IC2")) {

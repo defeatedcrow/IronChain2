@@ -94,6 +94,25 @@ public class RecipeRegister {
 				Character.valueOf('Y'),
 				DCsIronChain.ironChain }));
 
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(DCsIronChain.toolBag, 1), new Object[] {
+				"XXX",
+				" ZY",
+				Character.valueOf('X'),
+				new ItemStack(Items.leather, 1, 0),
+				Character.valueOf('Y'),
+				DCsIronChain.ironChain,
+				Character.valueOf('Z'),
+				Blocks.chest }));
+
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(DCsIronChain.lifeJacket, 1), new Object[] {
+				"X X",
+				"YYY",
+				"XXX",
+				Character.valueOf('X'),
+				"plankWood",
+				Character.valueOf('Y'),
+				Items.leather }));
+
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(DCsIronChain.anzenBoots, 1), new Object[] {
 				"XZX",
 				"Y Y",
@@ -237,6 +256,26 @@ public class RecipeRegister {
 				"X",
 				Character.valueOf('X'),
 				DCsIronChain.fluidSignL }));
+
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(DCsIronChain.dengerSign, 1, 0), new Object[] {
+				"X",
+				Character.valueOf('X'),
+				new ItemStack(DCsIronChain.dengerSign, 1, 1) }));
+
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(DCsIronChain.dengerSign, 1, 1), new Object[] {
+				"X",
+				Character.valueOf('X'),
+				new ItemStack(DCsIronChain.dengerSign, 1, 2) }));
+
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(DCsIronChain.dengerSign, 1, 2), new Object[] {
+				"X",
+				Character.valueOf('X'),
+				new ItemStack(DCsIronChain.dengerSign, 1, 3) }));
+
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(DCsIronChain.dengerSign, 1, 3), new Object[] {
+				"X",
+				Character.valueOf('X'),
+				new ItemStack(DCsIronChain.dengerSign, 1, 0) }));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(DCsIronChain.altimeter, 1), new Object[] {
 				" Y ",

@@ -215,11 +215,12 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 				if (this.getStackInSlot(i) != null) {
 					ItemStack itemstack = this.getStackInSlot(i).copy();
 					int side = ForgeDirection.OPPOSITES[BlockRHopper.getDirectionFromMetadata(this.getBlockMetadata())];
-					int extract = this.canInsertSize(iinventory, itemstack, this.getExtractLimitSize(), side);
+					// 上面偽装
+					int extract = this.canInsertSize(iinventory, itemstack, this.getExtractLimitSize(), 1);
 
 					if (extract > 0) {
 						ItemStack insert = this.decrStackSize(i, extract);
-						insertStack(iinventory, insert, side);
+						insertStack(iinventory, insert, 1);
 						iinventory.markDirty();
 						this.markDirty();
 						return true;

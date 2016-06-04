@@ -10,6 +10,8 @@ tile.defeatedcrow.dengerSign_electric.name=High Voltage Sign
 tile.defeatedcrow.dengerSign_radiation.name=Radioactive Sign
 tile.defeatedcrow.fluidSign_S.name=Small Fluid Sign
 tile.defeatedcrow.fluidSign_L.name=Large Fluid Sign
+tile.defeatedcrow.build_ashiba.name=Scaffolding Plate
+tile.defeatedcrow.stairs_ashiba.name=Scaffolding Stairs
 
 tile.defeatedcrow.reversalHopper.name=Reversal Hopper
 tile.defeatedcrow.reversalHopper_gold.name=Golden Hopper (Reversal)

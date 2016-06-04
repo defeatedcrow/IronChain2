@@ -34,19 +34,19 @@ public class BlockAshiba extends Block {
 	@Override
 	public void setBlockBoundsForItemRender() {
 		float f2 = 0.0625F;
-		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
 	}
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
-		this.setBlockBoundsBasedOnState(par1World, par2, par3, par4);
+		this.updateCollisionBounds(par1World.getBlockMetadata(par2, par3, par4));
 		return super.getCollisionBoundingBoxFromPool(par1World, par2, par3, par4);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getSelectedBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
-		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+		this.updateAnchorBounds(par1World.getBlockMetadata(par2, par3, par4));
 		return super.getSelectedBoundingBoxFromPool(par1World, par2, par3, par4);
 	}
 
@@ -56,13 +56,19 @@ public class BlockAshiba extends Block {
 	}
 
 	public void updateAnchorBounds(int par1) {
-		float f2 = 0.0625F;
-		float f1 = 0.9375F;
-
 		if (par1 == 0) {
-			this.setBlockBounds(f2, 0.0F, f2, f1, f2, f1);
+			this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
 		} else {
-			this.setBlockBounds(f2, 0.0F, f2, f1, 1.0F, f1);
+			this.setBlockBounds(0.0F, 0.5F, 0.0F, 1.0F, 1.0F, 1.0F);
+		}
+	}
+
+	public void updateCollisionBounds(int par1) {
+		float f = 0.0625F;
+		if (par1 == 0) {
+			this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, f, 1.0F);
+		} else {
+			this.setBlockBounds(0.0F, 1.0F - f, 0.0F, 1.0F, 1.0F, 1.0F);
 		}
 	}
 
@@ -84,35 +90,16 @@ public class BlockAshiba extends Block {
 	@Override
 	public int onBlockPlaced(World par1World, int par2, int par3, int par4, int par5, float par6, float par7,
 			float par8, int par9) {
-		Block b = par1World.getBlock(par2, par3 + 1, par4);
-		int l = 0;
-
-		if (b == this) {
-			l = 1;
+		if (par7 <= 0.5F || par7 == 1.0F) {
+			return 0;
 		} else {
-			l = 0;
+			return 1;
 		}
-
-		return l;
-	}
-
-	@Override
-	public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, Block par5) {
-		Block b = par1World.getBlock(par2, par3 + 1, par4);
-		int l = 0;
-
-		if (b == this) {
-			l = 1;
-		} else {
-			l = 0;
-		}
-
-		par1World.setBlockMetadataWithNotify(par2, par3, par4, l, 3);
 	}
 
 	@Override
 	public int getRenderType() {
-		return 0;
+		return DCsIronChain.modelAshiba;
 	}
 
 	@Override
@@ -124,12 +111,7 @@ public class BlockAshiba extends Block {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister par1IconRegister) {
-		this.blockIcon = par1IconRegister.registerIcon("dcironchain:ashiba_T");
-		this.sideIcon = par1IconRegister.registerIcon("dcironchain:ashiba_S");
-	}
-
-	@Override
-	public boolean isLadder(IBlockAccess world, int x, int y, int z, EntityLivingBase entity) {
-		return true;
+		this.blockIcon = par1IconRegister.registerIcon("dcironchain:ashiba_top");
+		this.sideIcon = par1IconRegister.registerIcon("dcironchain:ashiba_side");
 	}
 }

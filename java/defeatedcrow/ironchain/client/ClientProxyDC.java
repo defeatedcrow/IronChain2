@@ -53,6 +53,8 @@ public class ClientProxyDC extends CommonProxyDC {
 		RenderingRegistry.registerBlockHandler(new RenderSignS());
 		RenderingRegistry.registerBlockHandler(new RenderSignL());
 		RenderingRegistry.registerBlockHandler(new RenderChain());
+		RenderingRegistry.registerBlockHandler(new RenderAshiba());
+		RenderingRegistry.registerBlockHandler(new RenderAshibaStairs());
 	}
 
 	@Override

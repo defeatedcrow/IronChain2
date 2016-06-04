@@ -48,7 +48,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @Mod(
 		modid = "DCIronChain",
 		name = "DCsIronChain2",
-		version = "1.7.10_2.2b",
+		version = "1.7.10_2.3a",
 		dependencies = "required-after:Forge@[10.13.2.1291,);after:BuildCraft|Core")
 public class DCsIronChain {
 
@@ -117,7 +117,7 @@ public class DCsIronChain {
 	public static boolean signIcon = false;
 	public static boolean autoTool = true;
 
-	public static boolean debug = true;
+	public static boolean debug = false;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -198,6 +198,10 @@ public class DCsIronChain {
 		hopperBlack = (new BlockRHopperBlack(false)).setBlockName("defeatedcrow.positiveHopper_black")
 				.setCreativeTab(ironchainTab);
 
+		ashibaBlock = (new BlockAshiba()).setBlockName("defeatedcrow.build_ashiba").setCreativeTab(ironchainTab);
+
+		ashibaStair = (new BlockAshibaStairs()).setBlockName("defeatedcrow.stairs_ashiba").setCreativeTab(ironchainTab);
+
 		anzenMet = (new ItemAnzenArmor(ItemArmor.ArmorMaterial.CHAIN, DCsIronChain.proxy.addArmor("anzenarmor"), 0))
 				.setUnlocalizedName("defeatedcrow.anzenMet").setCreativeTab(ironchainTab)
 				.setTextureName("dcironchain:anzen_met");
@@ -238,6 +242,8 @@ public class DCsIronChain {
 		GameRegistry.registerBlock(RHopperBlack, "reversalHopper_black");
 		GameRegistry.registerBlock(hopperGold, "positiveHopper_gold");
 		GameRegistry.registerBlock(hopperBlack, "positiveHopper_black");
+		GameRegistry.registerBlock(ashibaBlock, "build_ashiba");
+		GameRegistry.registerBlock(ashibaStair, "stairs_ashiba");
 
 		GameRegistry.registerItem(anzenMet, "anzen_met");
 		GameRegistry.registerItem(sagyougi, "sagyougi");
@@ -260,6 +266,8 @@ public class DCsIronChain {
 		this.modelSignM = proxy.getRenderID();
 		this.modelSignL = proxy.getRenderID();
 		this.modelChain = proxy.getRenderID();
+		this.modelAshiba = proxy.getRenderID();
+		this.modelAshibaStair = proxy.getRenderID();
 		proxy.registerRenderers();
 
 		// Registering new recipe

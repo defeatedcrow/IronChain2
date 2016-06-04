@@ -7,6 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RecipeRegister {
@@ -302,6 +303,36 @@ public class RecipeRegister {
 				Items.compass,
 				Character.valueOf('W'),
 				Items.redstone }));
+
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(DCsIronChain.ashibaStair, 9), new Object[] {
+				" Y ",
+				"XXX",
+				Character.valueOf('X'),
+				DCsIronChain.ironChain,
+				Character.valueOf('Y'),
+				Items.iron_ingot }));
+
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(DCsIronChain.ashibaStair, 3), new Object[] {
+				"X  ",
+				" X ",
+				"  X",
+				Character.valueOf('X'),
+				DCsIronChain.ashibaBlock }));
+
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(DCsIronChain.ashibaStair, 3), new Object[] {
+				"  X",
+				" X ",
+				"X  ",
+				Character.valueOf('X'),
+				DCsIronChain.ashibaBlock }));
+
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(DCsIronChain.ashibaBlock, 1),
+				new Object[] { new ItemStack(DCsIronChain.ashibaStair, 1) }));
+
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.iron_ingot, 1), new Object[] {
+				new ItemStack(DCsIronChain.ashibaBlock, 1),
+				new ItemStack(DCsIronChain.ashibaBlock, 1),
+				new ItemStack(DCsIronChain.ashibaBlock, 1) }));
 
 		if (DCsIronChain.bronzeRecipe) {
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.iron_bars, 16), new Object[] {

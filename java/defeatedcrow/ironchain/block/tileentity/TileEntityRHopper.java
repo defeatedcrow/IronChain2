@@ -3,10 +3,13 @@ package defeatedcrow.ironchain.block.tileentity;
 import java.util.ArrayList;
 import java.util.List;
 
-import defeatedcrow.ironchain.integration.*;
-import defeatedcrow.ironchain.*;
-import defeatedcrow.ironchain.block.*;
+import buildcraft.api.transport.IPipeConnection;
+import buildcraft.api.transport.IPipeTile.PipeType;
 import cpw.mods.fml.common.Optional;
+import defeatedcrow.ironchain.DCsIronChain;
+import defeatedcrow.ironchain.IronChainLog;
+import defeatedcrow.ironchain.block.BlockRHopper;
+import defeatedcrow.ironchain.integration.IntegrationBC;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.command.IEntitySelector;
@@ -28,16 +31,12 @@ import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Facing;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import buildcraft.api.transport.IPipeConnection;
-import buildcraft.api.transport.IPipeConnection.ConnectOverride;
-import buildcraft.api.transport.IPipeTile.PipeType;
 
-@Optional.InterfaceList({ @Optional.Interface(
-		iface = "buildcraft.api.transport.IPipeConnection",
-		modid = "BuildCraft|Core"), })
+@Optional.InterfaceList({
+		@Optional.Interface(iface = "buildcraft.api.transport.IPipeConnection", modid = "BuildCraft|Core"),
+})
 public class TileEntityRHopper extends TileEntity implements IHopper, IReversalHopper, IPipeConnection {
 	protected int transferCooldown = -1;
 
@@ -172,8 +171,8 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 				from = ForgeDirection.DOWN;// 下向きに設置した場合は真上を向いている
 			if (!this.isReversal() && from == ForgeDirection.DOWN)
 				from = ForgeDirection.UP;
-			ArrayList<ForgeDirection> dir = IntegrationBC
-					.getPipeConected(this.worldObj, this.xCoord, this.yCoord, this.zCoord, from);
+			ArrayList<ForgeDirection> dir = IntegrationBC.getPipeConected(this.worldObj, this.xCoord, this.yCoord,
+					this.zCoord, from);
 
 			// fromはメタデータから得た向き（一方向）なので、大抵の場合はサイズ1か0のはず
 			if (dir.size() > 0) {
@@ -263,8 +262,8 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 				}
 			}
 		} else {
-			EntityItem entityitem = getEntityAbove(par0Hopper.getWorldObj(), par0Hopper, par0Hopper.getXPos(), par0Hopper
-					.getYPos(), par0Hopper.getZPos());
+			EntityItem entityitem = getEntityAbove(par0Hopper.getWorldObj(), par0Hopper, par0Hopper.getXPos(),
+					par0Hopper.getYPos(), par0Hopper.getZPos());
 
 			if (entityitem != null) {
 				return insertStackFromEntity(par0Hopper, entityitem);
@@ -274,12 +273,13 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 	}
 
 	// インベントリからのアイテムをホッパーに投入する処理部分
-	protected static boolean insertStackFromInventory(IHopper par0Hopper, IInventory par1IInventory, int par2, int par3) {
+	protected static boolean insertStackFromInventory(IHopper par0Hopper, IInventory par1IInventory, int par2,
+			int par3) {
 		ItemStack itemstack = par1IInventory.getStackInSlot(par2);
 		int extract = 1;
 		if (itemstack != null && par0Hopper instanceof TileEntityRHopper) {
-			extract = ((TileEntityRHopper) par0Hopper)
-					.canInsertSize(par0Hopper, itemstack, ((TileEntityRHopper) par0Hopper).getExtractLimitSize(), par3);
+			extract = ((TileEntityRHopper) par0Hopper).canInsertSize(par0Hopper, itemstack,
+					((TileEntityRHopper) par0Hopper).getExtractLimitSize(), par3);
 		}
 
 		if (itemstack != null && canExtractItemFromInventory(par1IInventory, itemstack, par2, par3)) {
@@ -358,6 +358,9 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 
 			for (int j = 0; j < aint.length; ++j) {
 				ItemStack checkItem = isidedinventory.getStackInSlot(j);
+				if (!canInsertItemToInventory(inv, checkItem, j, side)) {
+					continue;
+				}
 				if (checkItem == null) {
 					check = isidedinventory.getInventoryStackLimit();
 					break;
@@ -372,6 +375,9 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 
 			for (int l = 0; l < k; ++l) {
 				ItemStack checkItem = inv.getStackInSlot(l);
+				if (!canInsertItemToInventory(inv, checkItem, l, side)) {
+					continue;
+				}
 				if (checkItem == null) {
 					check = inv.getInventoryStackLimit();
 					break;
@@ -445,8 +451,8 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 	// 搬出先インベントリ
 	protected IInventory getOutputInventory() {
 		int i = BlockRHopper.getDirectionFromMetadata(this.getBlockMetadata());
-		IInventory iinventory = getInventoryAtLocation(this.getWorldObj(), this.xCoord + Facing.offsetsXForSide[i], this.yCoord
-				+ Facing.offsetsYForSide[i], this.zCoord + Facing.offsetsZForSide[i]);
+		IInventory iinventory = getInventoryAtLocation(this.getWorldObj(), this.xCoord + Facing.offsetsXForSide[i],
+				this.yCoord + Facing.offsetsYForSide[i], this.zCoord + Facing.offsetsZForSide[i]);
 		return iinventory;
 	}
 
@@ -456,8 +462,8 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 		if (par0Hopper instanceof TileEntityRHopper) {
 			ajust = ((TileEntityRHopper) par0Hopper).isReversal() ? -1.0D : 1.0D;
 		}
-		return getInventoryAtLocation(par0Hopper.getWorldObj(), par0Hopper.getXPos(), par0Hopper.getYPos() + ajust, par0Hopper
-				.getZPos());
+		return getInventoryAtLocation(par0Hopper.getWorldObj(), par0Hopper.getXPos(), par0Hopper.getYPos() + ajust,
+				par0Hopper.getZPos());
 	}
 
 	// EntityItemの吸引範囲
@@ -471,12 +477,11 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 			if (height < 1)
 				height = 1;
 			if (((TileEntityRHopper) hopper).isReversal()) {
-				AABB = AxisAlignedBB
-						.getBoundingBox(par1 - range, par3 - height, par5 - range, par1 + range + 1, par3, par5 + range
-								+ 1);
+				AABB = AxisAlignedBB.getBoundingBox(par1 - range, par3 - height, par5 - range, par1 + range + 1, par3,
+						par5 + range + 1);
 			} else {
-				AABB = AxisAlignedBB.getBoundingBox(par1 - range, par3 + 1, par5 - range, par1 + range + 1, par3
-						+ height + 1, par5 + range + 1);
+				AABB = AxisAlignedBB.getBoundingBox(par1 - range, par3 + 1, par5 - range, par1 + range + 1,
+						par3 + height + 1, par5 + range + 1);
 			}
 		}
 
@@ -512,9 +517,9 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 		}
 
 		if (iinventory == null) {
-			List list = par0World
-					.getEntitiesWithinAABBExcludingEntity((Entity) null, AxisAlignedBB
-							.getBoundingBox(par1, par3, par5, par1 + 1.0D, par3 - 2.0D, par5 + 1.0D), IEntitySelector.selectInventories);
+			List list = par0World.getEntitiesWithinAABBExcludingEntity((Entity) null,
+					AxisAlignedBB.getBoundingBox(par1, par3, par5, par1 + 1.0D, par3 - 2.0D, par5 + 1.0D),
+					IEntitySelector.selectInventories);
 
 			if (list != null && list.size() > 0) {
 				iinventory = (IInventory) list.get(par0World.rand.nextInt(list.size()));
@@ -628,17 +633,15 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
 
-		return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : entityplayer
-				.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
+		return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false
+				: entityplayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
 	}
 
 	@Override
-	public void openInventory() {
-	}
+	public void openInventory() {}
 
 	@Override
-	public void closeInventory() {
-	}
+	public void closeInventory() {}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
@@ -696,7 +699,9 @@ public class TileEntityRHopper extends TileEntity implements IHopper, IReversalH
 			}
 		}
 		if (extract != null) {
-			return new ItemStack[] { extract };
+			return new ItemStack[] {
+					extract
+			};
 		}
 		return null;
 	}

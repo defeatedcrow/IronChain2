@@ -26,7 +26,9 @@ public enum PlaneDir {
 
 	public static final PlaneDir[] DIRECTIONS = { NORTH, SOUTH, WEST, EAST };
 	public static final ForgeDirection[] FORGE_DIRECTIONS = {
-			ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.WEST,
+			ForgeDirection.NORTH,
+			ForgeDirection.SOUTH,
+			ForgeDirection.WEST,
 			ForgeDirection.EAST };
 	public static final int[] OPPOSITES = { 1, 0, 3, 2 };
 
@@ -54,6 +56,11 @@ public enum PlaneDir {
 
 	public PlaneDir getOpposite() {
 		return getDir(OPPOSITES[ordinal()]);
+	}
+
+	public static PlaneDir getPlayerDir(int i) {
+		int r = i & 3;
+		return NORTH;
 	}
 
 }

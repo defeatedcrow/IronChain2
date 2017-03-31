@@ -3,16 +3,11 @@ package defeatedcrow.ironchain.block.tileentity;
 import java.util.ArrayList;
 import java.util.List;
 
-import mods.defeatedcrow.recipe.BrewingRecipe;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-
 public class FluidDataRegistry {
 
 	public final static FluidDataRegistry instance = new FluidDataRegistry();
 
-	FluidDataRegistry() {
-	}
+	FluidDataRegistry() {}
 
 	private static ArrayList<FluidData> dataList = new ArrayList<FluidData>();
 

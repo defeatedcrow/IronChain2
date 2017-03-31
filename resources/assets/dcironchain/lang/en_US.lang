@@ -12,6 +12,8 @@ tile.defeatedcrow.fluidSign_S.name=Small Fluid Sign
 tile.defeatedcrow.fluidSign_L.name=Large Fluid Sign
 tile.defeatedcrow.build_ashiba.name=Scaffolding Plate
 tile.defeatedcrow.stairs_ashiba.name=Scaffolding Stairs
+tile.defeatedcrow.build_hashigo.name=Iron Ladder
+tile.defeatedcrow.build_fence.name=Guard Fence
 
 tile.defeatedcrow.reversalHopper.name=Reversal Hopper
 tile.defeatedcrow.reversalHopper_gold.name=Golden Hopper (Reversal)

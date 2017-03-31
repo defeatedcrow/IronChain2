@@ -304,9 +304,9 @@ public class RecipeRegister {
 				Character.valueOf('W'),
 				Items.redstone }));
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(DCsIronChain.ashibaStair, 9), new Object[] {
-				" Y ",
-				"XXX",
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(DCsIronChain.ashibaBlock, 9), new Object[] {
+				" X ",
+				"YYY",
 				Character.valueOf('X'),
 				DCsIronChain.ironChain,
 				Character.valueOf('Y'),
@@ -326,9 +326,27 @@ public class RecipeRegister {
 				Character.valueOf('X'),
 				DCsIronChain.ashibaBlock }));
 
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(DCsIronChain.hashigo, 7), new Object[] {
+				"X X",
+				"XXX",
+				"X X",
+				Character.valueOf('X'),
+				DCsIronChain.ashibaBlock }));
+
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(DCsIronChain.guardFence, 6), new Object[] {
+				"XXX",
+				"XXX",
+				Character.valueOf('X'),
+				DCsIronChain.ashibaBlock }));
+
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(DCsIronChain.ashibaBlock, 1),
 				new Object[] { new ItemStack(DCsIronChain.ashibaStair, 1) }));
 
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(DCsIronChain.ashibaBlock, 1),
+				new Object[] { new ItemStack(DCsIronChain.hashigo, 1) }));
+
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(DCsIronChain.ashibaBlock, 1),
+				new Object[] { new ItemStack(DCsIronChain.guardFence, 1) }));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.iron_ingot, 1), new Object[] {
 				new ItemStack(DCsIronChain.ashibaBlock, 1),
 				new ItemStack(DCsIronChain.ashibaBlock, 1),

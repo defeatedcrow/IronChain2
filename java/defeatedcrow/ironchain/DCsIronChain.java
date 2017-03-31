@@ -1,60 +1,55 @@
 package defeatedcrow.ironchain;
 
-import static cpw.mods.fml.relauncher.Side.CLIENT;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-
 import org.lwjgl.input.Keyboard;
 
-import defeatedcrow.ironchain.*;
-import defeatedcrow.ironchain.block.*;
-import defeatedcrow.ironchain.event.PlayerUpdateEvent;
-import defeatedcrow.ironchain.event.ToolSupplyEvent;
-import defeatedcrow.ironchain.integration.RegisterFluidData;
-import defeatedcrow.ironchain.item.ItemAltimeter;
-import defeatedcrow.ironchain.item.ItemAnzenArmor;
-import defeatedcrow.ironchain.item.ItemLantern;
-import defeatedcrow.ironchain.item.ItemLifejacket;
-import defeatedcrow.ironchain.item.ItemToolBag;
-import defeatedcrow.ironchain.packet.PacketHandlerDC;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Item;
-import net.minecraft.src.*;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
-import net.minecraftforge.oredict.OreDictionary;
-import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
-import cpw.mods.fml.relauncher.SideOnly;
+import defeatedcrow.ironchain.block.BlockAnchorBolt;
+import defeatedcrow.ironchain.block.BlockAshiba;
+import defeatedcrow.ironchain.block.BlockAshibaStairs;
+import defeatedcrow.ironchain.block.BlockBarriarCorn;
+import defeatedcrow.ironchain.block.BlockFloodLight;
+import defeatedcrow.ironchain.block.BlockGuardFence;
+import defeatedcrow.ironchain.block.BlockHashigo;
+import defeatedcrow.ironchain.block.BlockIronChain;
+import defeatedcrow.ironchain.block.BlockKyatatu;
+import defeatedcrow.ironchain.block.BlockLightPart;
+import defeatedcrow.ironchain.block.BlockRHopper;
+import defeatedcrow.ironchain.block.BlockRHopperBlack;
+import defeatedcrow.ironchain.block.BlockRHopperGold;
+import defeatedcrow.ironchain.block.BlockSignL;
+import defeatedcrow.ironchain.block.BlockSignM;
+import defeatedcrow.ironchain.block.BlockSignS;
+import defeatedcrow.ironchain.block.ItemKyatatu;
+import defeatedcrow.ironchain.block.ItemSignM;
+import defeatedcrow.ironchain.event.PlayerUpdateEvent;
+import defeatedcrow.ironchain.event.ToolSupplyEvent;
+import defeatedcrow.ironchain.integration.RegisterFluidData;
+import defeatedcrow.ironchain.item.ItemAltimeter;
+import defeatedcrow.ironchain.item.ItemAnzenArmor;
+import defeatedcrow.ironchain.item.ItemLifejacket;
+import defeatedcrow.ironchain.item.ItemToolBag;
+import defeatedcrow.ironchain.packet.PacketHandlerDC;
+import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 
-@Mod(
-		modid = "DCIronChain",
-		name = "DCsIronChain2",
-		version = "1.7.10_2.3a",
-		dependencies = "required-after:Forge@[10.13.2.1291,);after:BuildCraft|Core")
+@Mod(modid = "DCIronChain", name = "DCsIronChain2", version = "1.7.10_2.3e", dependencies = "required-after:Forge@[10.13.2.1291,);after:BuildCraft|Core")
 public class DCsIronChain {
 
-	@SidedProxy(
-			clientSide = "defeatedcrow.ironchain.client.ClientProxyDC",
-			serverSide = "defeatedcrow.ironchain.CommonProxyDC")
+	@SidedProxy(clientSide = "defeatedcrow.ironchain.client.ClientProxyDC", serverSide = "defeatedcrow.ironchain.CommonProxyDC")
 	public static CommonProxyDC proxy;
 
 	@Instance("DCIronChain")
@@ -81,6 +76,8 @@ public class DCsIronChain {
 
 	public static Block ashibaBlock;
 	public static Block ashibaStair;
+	public static Block hashigo;
+	public static Block guardFence;
 
 	public static Item anzenMet, sagyougi, anzenBelt, anzenBoots;
 	public static Item lifeJacket;
@@ -104,6 +101,8 @@ public class DCsIronChain {
 	public static int modelChain;
 	public static int modelAshiba;
 	public static int modelAshibaStair;
+	public static int modelHashigo;
+	public static int modelFence;
 
 	public static int RHGoldCoolTime = 4;
 	public static float harnessCheckDistance = 5.0F;
@@ -125,29 +124,29 @@ public class DCsIronChain {
 		try {
 			cfg.load();
 
-			Property notUseLightBlock = cfg
-					.get("Setting", "NotUseLightBlock", notUseLight, "Floodlight block does not put a invisible light block.");
-			Property visibleLightBlock = cfg
-					.get("Setting", "VisibleLightBlock", visibleLight, "Allow invisible light block be visible.");
-			Property setCoolTime = cfg
-					.get("Setting", "GoldenHopperCoolingTime", RHGoldCoolTime, "Set the cooling time for Golden Upward Hopper.");
-			Property setHarnessDistance = cfg
-					.get("Setting", "SetHarnessCheckDistance", harnessCheckDistance, "Set the fall distance of checking by the safety harness.");
+			Property notUseLightBlock = cfg.get("Setting", "NotUseLightBlock", notUseLight,
+					"Floodlight block does not put a invisible light block.");
+			Property visibleLightBlock = cfg.get("Setting", "VisibleLightBlock", visibleLight,
+					"Allow invisible light block be visible.");
+			Property setCoolTime = cfg.get("Setting", "GoldenHopperCoolingTime", RHGoldCoolTime,
+					"Set the cooling time for Golden Upward Hopper.");
+			Property setHarnessDistance = cfg.get("Setting", "SetHarnessCheckDistance", harnessCheckDistance,
+					"Set the fall distance of checking by the safety harness.");
 
-			Property useBronzeRecipe = cfg
-					.get("Setting", "UseBronzeRecipe", bronzeRecipe, "Enable some recipe that use the bronze ingot instead of the iron ingot.");
+			Property useBronzeRecipe = cfg.get("Setting", "UseBronzeRecipe", bronzeRecipe,
+					"Enable some recipe that use the bronze ingot instead of the iron ingot.");
 
-			Property useJapaneseFluidSign = cfg
-					.get("Setting", "UseJapaneseFluidSign", JPsign, "Use Japanese to Fluid Sign. If you want to use English, please set false.");
+			Property useJapaneseFluidSign = cfg.get("Setting", "UseJapaneseFluidSign", JPsign,
+					"Use Japanese to Fluid Sign. If you want to use English, please set false.");
 
-			Property useFluidIconOnSign = cfg
-					.get("Setting", "UseIconOnFluidSign", JPsign, "Use Fluid Icon instead of banner texture in the fluid signboard.");
+			Property useFluidIconOnSign = cfg.get("Setting", "UseIconOnFluidSign", JPsign,
+					"Use Fluid Icon instead of banner texture in the fluid signboard.");
 
-			Property guiBagKey = cfg
-					.get("Setting", "ToolBagGuiKey", toolGuiKey, "Set Key Number for Opening ToolBag Gui.");
+			Property guiBagKey = cfg.get("Setting", "ToolBagGuiKey", toolGuiKey,
+					"Set Key Number for Opening ToolBag Gui.");
 
-			Property toolSup = cfg
-					.get("Setting", "AutoToolSupply", autoTool, "Enable supplying item from the tool bag, when using tool is broken.");
+			Property toolSup = cfg.get("Setting", "AutoToolSupply", autoTool,
+					"Enable supplying item from the tool bag, when using tool is broken.");
 
 			notUseLight = notUseLightBlock.getBoolean(notUseLight);
 			visibleLight = visibleLightBlock.getBoolean(visibleLight);
@@ -202,6 +201,10 @@ public class DCsIronChain {
 
 		ashibaStair = (new BlockAshibaStairs()).setBlockName("defeatedcrow.stairs_ashiba").setCreativeTab(ironchainTab);
 
+		hashigo = (new BlockHashigo()).setBlockName("defeatedcrow.build_hashigo").setCreativeTab(ironchainTab);
+
+		guardFence = (new BlockGuardFence()).setBlockName("defeatedcrow.build_fence").setCreativeTab(ironchainTab);
+
 		anzenMet = (new ItemAnzenArmor(ItemArmor.ArmorMaterial.CHAIN, DCsIronChain.proxy.addArmor("anzenarmor"), 0))
 				.setUnlocalizedName("defeatedcrow.anzenMet").setCreativeTab(ironchainTab)
 				.setTextureName("dcironchain:anzen_met");
@@ -244,6 +247,8 @@ public class DCsIronChain {
 		GameRegistry.registerBlock(hopperBlack, "positiveHopper_black");
 		GameRegistry.registerBlock(ashibaBlock, "build_ashiba");
 		GameRegistry.registerBlock(ashibaStair, "stairs_ashiba");
+		GameRegistry.registerBlock(hashigo, "build_hashigo");
+		GameRegistry.registerBlock(guardFence, "build_fence");
 
 		GameRegistry.registerItem(anzenMet, "anzen_met");
 		GameRegistry.registerItem(sagyougi, "sagyougi");
@@ -268,6 +273,8 @@ public class DCsIronChain {
 		this.modelChain = proxy.getRenderID();
 		this.modelAshiba = proxy.getRenderID();
 		this.modelAshibaStair = proxy.getRenderID();
+		this.modelHashigo = proxy.getRenderID();
+		this.modelFence = proxy.getRenderID();
 		proxy.registerRenderers();
 
 		// Registering new recipe

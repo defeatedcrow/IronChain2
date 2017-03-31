@@ -12,6 +12,8 @@ tile.defeatedcrow.fluidSign_S.name=液体看板(小)
 tile.defeatedcrow.fluidSign_L.name=液体看板(大)
 tile.defeatedcrow.build_ashiba.name=鉄板の床
 tile.defeatedcrow.stairs_ashiba.name=鉄板の階段
+tile.defeatedcrow.build_hashigo.name=鉄はしご
+tile.defeatedcrow.build_fence.name=安全柵
 
 tile.defeatedcrow.reversalHopper.name=上向きホッパー
 tile.defeatedcrow.reversalHopper_gold.name=黄金の上向きホッパー

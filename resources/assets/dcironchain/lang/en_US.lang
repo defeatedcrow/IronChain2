@@ -1,10 +1,10 @@
 tile.defeatedcrow.ironChain.name=Iron Chain
 tile.defeatedcrow.anchorBolt.name=Anchor Bolt
-tile.defeatedcrow.kyatatu.name=Kyatatu
+tile.defeatedcrow.kyatatu.name=Stepladder
 tile.defeatedcrow.floodlight.name=Flood Light
 tile.defeatedcrow.lightBlock.name=Invisible Light Block
-tile.defeatedcrow.barriarCorn.name=Traffic Corn
-tile.defeatedcrow.dengerSign_hijouguti.name=Emergency Exit
+tile.defeatedcrow.barriarCorn.name=Traffic Cone
+tile.defeatedcrow.dengerSign_hijouguti.name=Emergency Exit Sign
 tile.defeatedcrow.dengerSign_bio.name=Biohazard Sign
 tile.defeatedcrow.dengerSign_electric.name=High Voltage Sign
 tile.defeatedcrow.dengerSign_radiation.name=Radioactive Sign
